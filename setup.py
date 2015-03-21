@@ -30,7 +30,7 @@ tests_require = [
 testing_extras = tests_require + [
 ]
 
-setup(name='django-annotation',
+setup(name='django-modelhint',
       version='0.1',
       description='add annotations at django models fields',
       long_description=README + '\n\n' + CHANGES,
@@ -41,7 +41,7 @@ setup(name='django-annotation',
       keywords='',
       author="",
       author_email="",
-      url="https://github.com/podhmo/django-annotation",
+      url="https://github.com/podhmo/django-modelhint",
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
@@ -51,7 +51,7 @@ setup(name='django-annotation',
           'docs': docs_extras,
       },
       tests_require=tests_require,
-      test_suite="django_annotation.tests",
+      test_suite="django_modelhint.tests",
       entry_points="""
 """)
 

@@ -12,8 +12,8 @@ def normalize(target):
 class Tests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        from django_annotation import testing
-        from django_annotation import MappingManager, setup
+        from django_modelhint import testing
+        from django_modelhint import MappingManager, setup
         d = cls.manager = MappingManager(reserved_words=[("label", "*default-label*")])
         setup(cls.manager)
 
@@ -48,7 +48,7 @@ class Tests(unittest.TestCase):
         testing.create_table(Clan)
 
     def _getTarget(self):
-        from django_annotation import get_mapping
+        from django_modelhint import get_mapping
         return get_mapping
 
     def _callFUT(self, target):

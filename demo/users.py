@@ -4,7 +4,7 @@ from django.db import models
 from django.conf import settings
 from django.db import connections
 from django.core.management.color import no_style
-import django_annotation as d
+import django_modelhint as d
 
 settings.configure(
     DEBUG=True,
