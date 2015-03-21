@@ -2,18 +2,29 @@
 import logging
 from functools import wraps
 from singledispatch import singledispatch
+from collections import ChainMap
 from django.db import models
 logger = logging.getLogger(__name__)
 
 
 class MappingManager(object):
-    def __init__(self, reserved_word=["doc"]):
+    def __init__(self, default="", reserved_words=["doc"]):
         self.mapping = {}
-        self.reserved_word = set(reserved_word)
+        self.deafult = default
+        self.reserved_words = self.setup_reserved_words({}, reserved_words, default)
         self.marker = object()
 
-    def add_reserved_word(self, *ws):
-        self.reserved_word.update(ws)
+    def setup_reserved_words(self, D, candidates, default):
+        for c in candidates:
+            if isinstance(c, (list, tuple)):
+                D[c[0]] = c[1]
+            else:
+                D[c] = default
+        return D
+
+    def add_reserved_words(self, *args, **ws):
+        self.reserved_words = self.setup_reserved_words(self.reserved_words, args, self.default)
+        self.reserved_words = self.setup_reserved_words(self.reserved_words, ws, self.default)
 
     def get(self, k, default=None):
         try:
@@ -37,10 +48,9 @@ class MappingManager(object):
         @wraps(fn)
         def wrapped(*args, **kwargs):
             options = {}
-            for k in self.reserved_word:
-                v = kwargs.pop(k, self.marker)
-                if v is not self.marker:
-                    options[k] = v
+            for k, default in self.reserved_words.items():
+                v = kwargs.pop(k, default)
+                options[k] = v
             result = fn(*args, **kwargs)
             self.mapping[result] = options
             return result
@@ -67,18 +77,18 @@ def get_mapping(ob, mapping=None):
 @get_mapping.register(models.Field)
 def mapping__field(field, mapping=None):
     mapping = mapping or get_default_mapping()
-    return mapping.get(field) or {}
+    return ChainMap({}, mapping.get(field) or mapping.reserved_words)
 
 
 @get_mapping.register(models.Model)
 def mapping__model(ob, mapping=None):
     mapping = mapping or get_default_mapping()
     try:
-        return mapping[ob.__class__]
+        return ChainMap({}, mapping[ob.__class__])
     except KeyError:
         result = {f.name: get_mapping(f, mapping=mapping) for f in ob._meta.fields}
         mapping[ob.__class__] = result
-        return result
+        return ChainMap({}, result)
 
 
 def setup(mapping, callback=None):
