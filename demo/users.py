@@ -41,6 +41,13 @@ class User(models.Model):
         app_label = __name__
 
 
+class RegisterUser(User):
+
+    class Meta:
+        app_label = __name__
+        proxy = True
+
+
 if __name__ == "__main__":
     from django.conf import settings
     settings.INSTALLED_APPS += (__name__, )
@@ -48,4 +55,5 @@ if __name__ == "__main__":
 
     user = User()
     print(d.get_mapping(user))  # => {"name": {"doc": "名前"}}
+    print(d.get_mapping(RegisterUser))
 
