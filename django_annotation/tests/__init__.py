@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 from django.conf import settings
+import django
 settings.configure(
     DEBUG=True,
     DATABASES={"default": {
@@ -7,3 +8,4 @@ settings.configure(
         "NAME": ":memory:"
     }}
 )
+django.setup()

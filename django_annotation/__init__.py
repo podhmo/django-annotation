@@ -4,6 +4,7 @@ from functools import wraps
 from singledispatch import singledispatch
 from collections import ChainMap
 from django.db import models
+from django.db.models.base import ModelBase
 logger = logging.getLogger(__name__)
 
 
@@ -71,6 +72,9 @@ def set_default_mapping(mapping):
 
 @singledispatch
 def get_mapping(ob, mapping=None):
+    # ob.foo_set
+    if hasattr(ob, "model"):
+        return get_mapping(ob.model, mapping)
     return {}
 
 
@@ -78,6 +82,17 @@ def get_mapping(ob, mapping=None):
 def mapping__field(field, mapping=None):
     mapping = mapping or get_default_mapping()
     return ChainMap({}, mapping.get(field) or mapping.reserved_words)
+
+
+@get_mapping.register(ModelBase)
+def mapping__modelclass(model, mapping=None):
+    mapping = mapping or get_default_mapping()
+    try:
+        return ChainMap({}, mapping[model])
+    except KeyError:
+        result = {f.name: get_mapping(f, mapping=mapping) for f in model._meta.fields}
+        mapping[model] = result
+        return ChainMap({}, result)
 
 
 @get_mapping.register(models.Model)
