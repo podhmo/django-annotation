@@ -5,7 +5,7 @@ when model definition
 
 .. code-block:: python
 
-   import django_annoation as d
+   import django_modelhint as d
    d.get_default_mapping().add_reserved_words(doc="")
 
    class Group(models.Model):
@@ -20,7 +20,7 @@ when view
 
 .. code-block:: python
 
-   import django_annotation as d
+   import django_modelhint as d
    user = User.objects.get()
    d.get_mapping(user)  # => ChainMap({}, {'name': ChainMap({}, {'doc': '名前'}), 'id': ChainMap({}, {'doc': ''}), 'group': ChainMap({}, {'doc': ''})})
    d.get_mapping(user)["name"]["doc"]  # => '名前'

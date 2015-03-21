@@ -31,7 +31,7 @@ testing_extras = tests_require + [
 ]
 
 setup(name='django-modelhint',
-      version='0.1.1',
+      version='0.1.1.1',
       description='add annotations at django models fields',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
