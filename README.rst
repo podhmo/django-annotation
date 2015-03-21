@@ -1,4 +1,4 @@
-django-annotation
+django-modelhint
 ========================================
 
 when model definition
