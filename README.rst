@@ -18,7 +18,7 @@ when model definition
 
 when view
 
-.. code-blocok:: python
+.. code-block:: python
 
    import django_annotation as d
    user = User.objects.get()
