@@ -121,4 +121,4 @@ if __name__ != "__main__":
     def callback(k, registered):
         setattr(m, k, registered)
 
-    setup(default_mapping)
+    setup(default_mapping, callback=callback)
