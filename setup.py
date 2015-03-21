@@ -32,7 +32,7 @@ testing_extras = tests_require + [
 
 setup(name='django-annotation',
       version='0.1',
-      description='-',
+      description='add annotations at django models fields',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
           "Programming Language :: Python",
@@ -41,7 +41,7 @@ setup(name='django-annotation',
       keywords='',
       author="",
       author_email="",
-      url="",
+      url="https://github.com/podhmo/django-annotation",
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
